@@ -1,4 +1,4 @@
-package com.raysi.springsecurityfundamentals.config;
+package com.raysi.springsecurityfundamentals.session1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

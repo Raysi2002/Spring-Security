@@ -1,4 +1,4 @@
-package com.raysi.springsecurityfundamentals.controller;
+package com.raysi.springsecurityfundamentals.session1.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
