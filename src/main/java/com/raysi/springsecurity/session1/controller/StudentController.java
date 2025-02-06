@@ -48,4 +48,19 @@ public class StudentController {
             throw new RuntimeException("Something went wrong in controller layer");
         }
     }
+
+    @PostMapping("/api/student")
+    public ResponseEntity<Student> saveStudent(@RequestBody Student student){
+        try{
+            studentService.saveStudent(student);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .header("Accept-Datetime")
+                    .body(student);
+        }catch (RuntimeException e){
+            throw e;
+        }catch (Exception e){
+            throw  new RuntimeException("Something went wrong int the Controller layer");
+        }
+    }
 }
