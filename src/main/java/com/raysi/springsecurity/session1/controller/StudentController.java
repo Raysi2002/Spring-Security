@@ -2,8 +2,10 @@ package com.raysi.springsecurity.session1.controller;
 
 import com.raysi.springsecurity.session1.entity.Student;
 import com.raysi.springsecurity.session1.service.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,6 +63,15 @@ public class StudentController {
             throw e;
         }catch (Exception e){
             throw  new RuntimeException("Something went wrong int the Controller layer");
+        }
+    }
+
+    @GetMapping("/api/csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest httpServletRequest){
+        try{
+            return (CsrfToken) httpServletRequest.getAttribute("_csrf");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
