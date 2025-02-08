@@ -49,4 +49,14 @@ public class StudentServiceImplementation implements StudentService{
             throw new RuntimeException("Something went wrong in Service layer");
         }
     }
+
+    @Override
+    public void deleteStudent(Long id) {
+
+    }
+
+    @Override
+    public void updateStudent(Long id, String name) {
+
+    }
 }
