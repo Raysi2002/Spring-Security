@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -54,7 +55,7 @@ public class SecurityConfig {
         return httpSecurity
                 // Disabling CSRF (Cross-Site Request Forgery) protection.
                 // This is generally not recommended for web applications but might be necessary for APIs where CSRF protection is handled differently (e.g., token-based authentication).
-                .csrf(customizer -> customizer.disable())
+                .csrf(AbstractHttpConfigurer::disable)
 
                 // Configuring authorization to require authentication for all incoming requests.
                 // This means no request can be accessed without proper authentication.
