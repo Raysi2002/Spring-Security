@@ -52,10 +52,23 @@ public class SecurityConfig {
 
         /// Using Builder Pattern
         return httpSecurity
+                // Disabling CSRF (Cross-Site Request Forgery) protection.
+                // This is generally not recommended for web applications but might be necessary for APIs where CSRF protection is handled differently (e.g., token-based authentication).
                 .csrf(customizer -> customizer.disable())
+
+                // Configuring authorization to require authentication for all incoming requests.
+                // This means no request can be accessed without proper authentication.
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+
+                // Enabling form-based login with default configurations.
+                // This allows users to authenticate via a login page provided by Spring Security.
                 .formLogin(Customizer.withDefaults())
+
+                // Enabling HTTP Basic authentication.
+                // This is useful for APIs or development/testing purposes but should not be used in production without HTTPS.
                 .httpBasic(Customizer.withDefaults())
+
+                // Building the HttpSecurity configuration.
                 .build();
     }
 }
