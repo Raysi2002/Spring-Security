@@ -1,7 +1,10 @@
 package com.raysi.springsecurity.session1.controller;
 
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.http.HttpResponse;
 
 @RestController
 public class HomeController {
