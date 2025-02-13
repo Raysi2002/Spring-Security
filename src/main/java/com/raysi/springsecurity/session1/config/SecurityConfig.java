@@ -75,20 +75,28 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
+    @Bean // Marks this method as a Spring bean, making it available for dependency injection.
+    public UserDetailsService userDetailsService() {
+
+        // Creating a user with the username "aashu", password "123", and role "ADMIN".
+        // withDefaultPasswordEncoder() is used to encode the password, but it's not recommended for production.
         UserDetails user1 = User
-                .withDefaultPasswordEncoder()
-                .username("aashu")
-                .password("123")
-                .roles("ADMIN")
-                .build();
+                .withDefaultPasswordEncoder()  // Uses a basic password encoder (not secure for production use).
+                .username("aashu")             // Sets username for this user.
+                .password("123")               // Sets plaintext password (only for testing purposes).
+                .roles("ADMIN")                // Assigns "ADMIN" role to this user.
+                .build();                       // Builds the UserDetails object.
+
+        // Creating another user with username "bunu", password "123", and role "USER".
         UserDetails user2 = User
                 .withDefaultPasswordEncoder()
                 .username("bunu")
                 .password("123")
                 .roles("USER")
                 .build();
+
+        // InMemoryUserDetailsManager stores user details in memory.
+        // This is useful for testing but should not be used in production as data is lost when the application restarts.
         return new InMemoryUserDetailsManager(user1, user2);
     }
 }
