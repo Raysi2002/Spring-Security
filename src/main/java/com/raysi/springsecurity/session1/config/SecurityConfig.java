@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -55,7 +57,7 @@ public class SecurityConfig {
         return httpSecurity
                 // Disabling CSRF (Cross-Site Request Forgery) protection.
                 // This is generally not recommended for web applications but might be necessary for APIs where CSRF protection is handled differently (e.g., token-based authentication).
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(customizer -> customizer.disable())
 
                 // Configuring authorization to require authentication for all incoming requests.
                 // This means no request can be accessed without proper authentication.
@@ -71,5 +73,22 @@ public class SecurityConfig {
 
                 // Building the HttpSecurity configuration.
                 .build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        UserDetails user1 = User
+                .withDefaultPasswordEncoder()
+                .username("aashu")
+                .password("123")
+                .roles("ADMIN")
+                .build();
+        UserDetails user2 = User
+                .withDefaultPasswordEncoder()
+                .username("bunu")
+                .password("123")
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user1, user2);
     }
 }
