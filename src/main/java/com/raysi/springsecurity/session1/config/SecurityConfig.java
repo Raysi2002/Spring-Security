@@ -1,14 +1,18 @@
 package com.raysi.springsecurity.session1.config;
 
 // Importing required Spring Security and Configuration-related classes
+import com.raysi.springsecurity.session1.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -19,6 +23,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration // Marks this class as a Spring Configuration class (equivalent to XML configuration in Spring)
 @EnableWebSecurity // Enables Spring Security for the application
 public class SecurityConfig {
+
+    private final UserService userService;
+
+    public SecurityConfig(UserService userService){
+        this.userService = userService;
+    }
+
 
     /**
      * Defines the security filter chain for handling security configurations.
@@ -75,28 +86,36 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean // Marks this method as a Spring bean, making it available for dependency injection.
-    public UserDetailsService userDetailsService() {
+//    @Bean // Marks this method as a Spring bean, making it available for dependency injection.
+//    public UserDetailsService userDetailsService() {
+//
+//        // Creating a user with the username "aashu", password "123", and role "ADMIN".
+//        // withDefaultPasswordEncoder() is used to encode the password, but it's not recommended for production.
+//        UserDetails user1 = User
+//                .withDefaultPasswordEncoder()  // Uses a basic password encoder (not secure for production use).
+//                .username("aashu")             // Sets username for this user.
+//                .password("123")               // Sets plaintext password (only for testing purposes).
+//                .roles("ADMIN")                // Assigns "ADMIN" role to this user.
+//                .build();                       // Builds the UserDetails object.
+//
+//        // Creating another user with username "bunu", password "123", and role "USER".
+//        UserDetails user2 = User
+//                .withDefaultPasswordEncoder()
+//                .username("bunu")
+//                .password("123")
+//                .roles("USER")
+//                .build();
+//
+//        // InMemoryUserDetailsManager stores user details in memory.
+//        // This is useful for testing but should not be used in production as data is lost when the application restarts.
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
 
-        // Creating a user with the username "aashu", password "123", and role "ADMIN".
-        // withDefaultPasswordEncoder() is used to encode the password, but it's not recommended for production.
-        UserDetails user1 = User
-                .withDefaultPasswordEncoder()  // Uses a basic password encoder (not secure for production use).
-                .username("aashu")             // Sets username for this user.
-                .password("123")               // Sets plaintext password (only for testing purposes).
-                .roles("ADMIN")                // Assigns "ADMIN" role to this user.
-                .build();                       // Builds the UserDetails object.
-
-        // Creating another user with username "bunu", password "123", and role "USER".
-        UserDetails user2 = User
-                .withDefaultPasswordEncoder()
-                .username("bunu")
-                .password("123")
-                .roles("USER")
-                .build();
-
-        // InMemoryUserDetailsManager stores user details in memory.
-        // This is useful for testing but should not be used in production as data is lost when the application restarts.
-        return new InMemoryUserDetailsManager(user1, user2);
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setUserDetailsService(userService);
+        return provider;
     }
 }
