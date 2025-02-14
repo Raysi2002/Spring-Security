@@ -9,30 +9,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@RestController
+/**
+ * UserController handles user-related HTTP requests such as registration.
+ * This class integrates with Spring Security by encoding passwords before storing them.
+ */
+@RestController  // Marks this class as a REST controller, handling HTTP requests.
 public class UserController {
 
-    private final UserService userService;
+    private final UserService userService;  // Service layer dependency for user management.
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    // BCryptPasswordEncoder is used for **secure password hashing**. Strength set to 12.
 
-    public UserController(UserService userService){
+    /**
+     * Constructor-based Dependency Injection for UserService.
+     * This is the recommended way to inject dependencies in Spring.
+     *
+     * @param userService The user service implementation.
+     */
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Users> register(@RequestBody Users user){
-        try{
+    /**
+     * Handles user registration requests.
+     * It accepts a JSON payload with user details, hashes the password, and saves the user.
+     *
+     * @param user The user entity received from the client.
+     * @return ResponseEntity containing the registered user and appropriate HTTP status.
+     */
+    @PostMapping("/register")  // Maps HTTP POST requests to "/register" endpoint.
+    public ResponseEntity<Users> register(@RequestBody Users user) {
+        try {
+            // 🔹 **Secure Password Hashing**
+            // The received password is **hashed** using BCrypt before storing it in the database.
             user.setPassword(encoder.encode(user.getPassword()));
+
+            // 🔹 **Saving User**
+            // Calls the service layer to persist the new user.
             userService.saveUser(user);
-            return ResponseEntity
-                    .status(HttpStatus.ACCEPTED)
-                    .body(user);
-        }catch (Exception e){
+
+            // 🔹 **Returning Success Response**
+            // If successful, returns HTTP 202 (ACCEPTED) status with the registered user.
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+        } catch (Exception e) {
+            // 🔹 **Exception Handling**
+            // If an error occurs, a runtime exception is thrown.
+            // ⚠️ **Improvement Needed**: Do not throw a generic `RuntimeException` here.
             throw new RuntimeException("Something went wrong in controller layer");
         }
     }
-
 }
