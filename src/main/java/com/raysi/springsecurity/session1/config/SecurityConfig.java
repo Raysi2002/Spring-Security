@@ -112,10 +112,15 @@ public class SecurityConfig {
 //    }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+
+        // Sets the password encoder. NoOpPasswordEncoder is NOT recommended for production.
         provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+
+        // Sets the userDetailsService, which is responsible for loading user details from the database.
         provider.setUserDetailsService(userService);
+
         return provider;
     }
 }
