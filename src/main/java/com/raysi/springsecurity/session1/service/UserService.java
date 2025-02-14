@@ -1,5 +1,6 @@
 package com.raysi.springsecurity.session1.service;
 
+import com.raysi.springsecurity.session1.entity.Users;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -12,4 +13,5 @@ import org.springframework.stereotype.Service;
 @Service // Marks this interface as a Spring-managed service.
 public interface UserService extends UserDetailsService {
     // No additional methods for now, but this allows future extensions.
+    void saveUser(Users user);
 }

@@ -46,4 +46,15 @@ public class UsersServiceImplementation implements UserService {
         // Return a UserPrincipal object, which wraps the user details for authentication.
         return new UserPrincipal(user);
     }
+
+    @Override
+    public void saveUser(Users user) {
+        if (user == null)
+            throw new RuntimeException("User can't be null");
+        try{
+            userRepository.save(user);
+        }catch (Exception e){
+            throw new RuntimeException("Something went wrong in Service layer");
+        }
+    }
 }
