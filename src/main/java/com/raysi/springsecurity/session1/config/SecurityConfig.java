@@ -73,8 +73,10 @@ public class SecurityConfig {
 
                 // Configuring authorization to require authentication for all incoming requests.
                 // This means no request can be accessed without proper authentication.
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
-
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("register", "login")  //These both links will not require the authentication
+                        .permitAll()
+                        .anyRequest().authenticated())
                 // Enabling form-based login with default configurations.
                 // This allows users to authenticate via a login page provided by Spring Security.
                 .formLogin(Customizer.withDefaults())
